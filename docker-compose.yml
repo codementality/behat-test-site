@@ -1,0 +1,47 @@
+version: '2'
+services:
+  nginx:
+    hostname: drupal.test
+    build: docker/nginx
+    ports:
+      - 8080:80
+    volumes:
+      - web-sites:/var/www
+      #- ./:/var/www
+    environment:
+      TZ: 'EST5EDT'
+  php:
+    build: docker/php
+    volumes:
+      #- ./:/var/www
+      - web-sites:/var/www
+    environment:
+      TZ: 'EST5EDT'
+  db:
+    image: mysql:5.7
+    environment:
+      #MYSQL_INITDB_SKIP_TZINFO: 1
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
+      MYSQL_DATABASE: drupal
+      MYSQL_ROOT_PASSWORD: root
+      #TZ: 'EST5EDT'
+    volumes:
+      - dbdata:/var/lib/mysql
+    #ports:
+    #  - 33306:3306
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025
+volumes:
+## persistent data volume for mysql data
+  dbdata:
+    driver: local
+  web-sites:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
+      device: ":$PWD"
+
