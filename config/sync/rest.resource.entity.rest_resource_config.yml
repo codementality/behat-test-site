@@ -1,0 +1,17 @@
+uuid: 021f48f4-0627-4c38-bcb3-d7c1bdfb296c
+langcode: en
+status: true
+dependencies:
+  module:
+    - basic_auth
+    - serialization
+id: entity.rest_resource_config
+plugin_id: 'entity:rest_resource_config'
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - basic_auth
